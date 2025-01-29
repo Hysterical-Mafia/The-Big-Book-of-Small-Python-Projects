@@ -11,9 +11,8 @@ Tags: short, game, puzzle
 
 import random
 
-#Constants for the game settings
-NUM_DIGITS = 3  #Number of digits in the secret number (e.g., try 1 or 10).
-MAX_GUESSES = 10  #Maximum number of guesses allowed (e.g., try 1 or 100).
+NUM_DIGITS = 3
+MAX_GUESSES = 10 
 
 def main():
     """
@@ -33,8 +32,7 @@ When I say:    That means:
 For example, if the secret number was 248 and your guess was 843, the
 clues would be Fermi Pico.''')
 
-    while True:  #Main game loop.
-        #Generate the secret number
+    while True:
         secretNum = getSecretNum()
         print('I have thought up a number.')
         print(f'You have {MAX_GUESSES} guesses to get it.')
@@ -42,24 +40,19 @@ clues would be Fermi Pico.''')
         numGuesses = 1
         while numGuesses <= MAX_GUESSES:
             guess = ''
-            #Keep prompting the player until a valid guess is entered
             while len(guess) != NUM_DIGITS or not guess.isdecimal():
                 print(f'Guess #{numGuesses}: ')
                 guess = input('> ')
 
-            #Get and display clues for the player's guess
             clues = getClues(guess, secretNum)
             print(clues)
             numGuesses += 1
 
-            #Check if the guess is correct
             if guess == secretNum:
-                break  # Exit the loop if guessed correctly
+                break  
             if numGuesses > MAX_GUESSES:
                 print('You ran out of guesses.')
                 print(f'The answer was {secretNum}.')
-
-        #Ask the player if they want to play again
         print('Do you want to play again? (yes or no)')
         if not input('> ').lower().startswith('y'):
             break
@@ -69,10 +62,9 @@ def getSecretNum():
     """
     Generates and returns a secret number with NUM_DIGITS unique random digits.
     """
-    numbers = list('0123456789')  #Create a list of digits from 0 to 9
-    random.shuffle(numbers)  #Shuffle the list into a random order
+    numbers = list('0123456789')  
+    random.shuffle(numbers) 
 
-    #Form the secret number using the first NUM_DIGITS digits
     secretNum = ''.join(numbers[:NUM_DIGITS])
     return secretNum
 
@@ -89,23 +81,44 @@ def getClues(guess, secretNum):
 
     clues = []
 
-    #Compare each digit in the guess to the secret number
     for i in range(len(guess)):
         if guess[i] == secretNum[i]:
-            # Correct digit in the correct position
             clues.append('Fermi')
         elif guess[i] in secretNum:
-            # Correct digit in the wrong position
             clues.append('Pico')
 
-    #Return 'Bagels' if no digits are correct
     if len(clues) == 0:
         return 'Bagels'
     else:
-        #Sort clues alphabetically to avoid revealing digit positions
         clues.sort()
         return ' '.join(clues)
 
-#Run the game if the script is executed directly
 if __name__ == '__main__':
     main()
+
+
+
+'''                    Answering the Questions for the Project
+
+What happens when you change the NUM_DIGITS constant?
+    Changing the NUM_DIGITS constant would change the number of digits that are in the secret number
+What happens when you change the MAX_GUESSES constant?
+    Changing the MAX_GUESSES constant allows for more or less guesses for the problem
+What happens if you set NUM_DIGITS to a number larger than 10?
+    Setting the NUM_DIGITS to a number larger than 10 would result in a out of range index error
+What happens if you replace secretNum = getSecretNum() on line 30 with secretNum = '123'?
+    Replacing the secret number with '123' would result in the secret number being '123' permanently and would make the random completely useless
+What error message do you get if you delete or comment out numGuesses = 1 on line 34?
+    "UnboundLocalError: local variable 'numGuesses' referenced before assignment"
+What happens if you delete or comment out random.shuffle(numbers) on line 62?
+    The numbers will always be 012 if there are three digits as you are not changing its order
+What happens if you delete or comment out if guess == secretNum: on line 74 and return 'You got it!' on line 75?
+    The player would never be able to know if there answer is correct
+What happens if you comment out numGuesses += 1 on line 44?
+    There would be an infinite loop as the numGuesses will always be less than the max guess as you are not increasing it
+
+
+
+
+
+'''
